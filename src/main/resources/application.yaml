@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/eventuate
+    username: root
+    password: root
+  kafka:
+    bootstrap-servers: localhost:9092
+
+eventuatelocal:
+  kafka:
+    bootstrap-servers: localhost:9092
+  cdc:
+    reader: MySqlBinlog
+    data-source-url: jdbc:mysql://localhost:3306/eventuate
+    db-user-name: root
+    db-password: root
