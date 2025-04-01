@@ -1,4 +1,4 @@
-package com.soa.eventsourcing;
+package com.soa.eventsourcing.command;
 
 import io.eventuate.Command;
 
