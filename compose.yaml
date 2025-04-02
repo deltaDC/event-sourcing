@@ -1,38 +1,56 @@
-version: '3.9'
+version: '3.8'
+
 services:
   zookeeper:
-    image: zookeeper:3.6.3
+    image: eventuateio/eventuateio-local-zookeeper:0.10.0
+    container_name: zookeeper
     ports:
       - "2181:2181"
 
   kafka:
-    image: confluentinc/cp-kafka:5.5.1
+    image: eventuateio/eventuateio-local-kafka:0.10.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
     ports:
       - "9092:9092"
     environment:
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    depends_on:
-      - zookeeper
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
+      - KAFKA_HEAP_OPTS=-Xmx320m -Xms320m
+      - ZOOKEEPER_SERVERS=zookeeper:2181
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
 
   mysql:
-    image: mysql:8.0
+    image: eventuateio/eventuateio-local-mysql:0.10.0
+    container_name: eventuate-mysql
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: eventuate
-    command: --default-authentication-plugin=mysql_native_password
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_USER=mysqluser
+      - MYSQL_PASSWORD=mysqlpw
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
 
-  cdc-service:
-    image: eventuateio/eventuate-cdc-service:0.8.0.RELEASE
-    environment:
-      EVENTUATELOCAL_CDC_READER_READER: MySqlBinlog
-      EVENTUATELOCAL_CDC_DB_USER_NAME: root
-      EVENTUATELOCAL_CDC_DB_PASSWORD: root
-      EVENTUATELOCAL_CDC_DB_HISTORY_DATA_SOURCE_URL: jdbc:mysql://mysql:3306/eventuate
-      EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+  cdcservice:
+    image: eventuateio/eventuateio-local-cdc-service:0.10.0
+    container_name: cdcservice
     depends_on:
       - mysql
       - kafka
+      - zookeeper
+    ports:
+      - "8099:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://eventuate-mysql/eventuate
+      - SPRING_DATASOURCE_USERNAME=mysqluser
+      - SPRING_DATASOURCE_PASSWORD=mysqlpw
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+      - EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING=zookeeper:2181
+      - EVENTUATELOCAL_CDC_DB_USER_NAME=root
+      - EVENTUATELOCAL_CDC_DB_PASSWORD=rootpassword

@@ -6,7 +6,6 @@ import com.soa.eventsourcing.command.CreateOrderCommand;
 import com.soa.eventsourcing.command.OrderCommand;
 import io.eventuate.AggregateRepository;
 import io.eventuate.EntityWithIdAndVersion;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
