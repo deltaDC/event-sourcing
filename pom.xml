@@ -65,17 +65,17 @@
 <!--            <artifactId>spring-kafka-test</artifactId>-->
 <!--            <scope>test</scope>-->
 <!--        </dependency>-->
-        <dependency>
-            <groupId>io.eventuate.local.java</groupId>
-            <artifactId>eventuate-local-java-spring-jdbc</artifactId>
-            <version>0.43.0.RELEASE</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/io.eventuate.local.java/eventuate-client-java -->
-        <dependency>
-            <groupId>io.eventuate.local.java</groupId>
-            <artifactId>eventuate-client-java</artifactId>
-            <version>0.43.0.RELEASE</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.eventuate.local.java</groupId>-->
+<!--            <artifactId>eventuate-local-java-spring-jdbc</artifactId>-->
+<!--            <version>0.43.0.RELEASE</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/io.eventuate.local.java/eventuate-client-java &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>io.eventuate.local.java</groupId>-->
+<!--            <artifactId>eventuate-client-java</artifactId>-->
+<!--            <version>0.43.0.RELEASE</version>-->
+<!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/io.eventuate.local.java/eventuate-local-java-spring-jdbc-starter -->
         <dependency>
             <groupId>io.eventuate.local.java</groupId>
